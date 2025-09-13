@@ -1,6 +1,9 @@
 const register = async (req, res, next) => {
     try {
+        const {id, userName, password }= req.body;
         console.log("user register successfully");
+
+        
         res.status(200).send("user register successfully");
     } catch (error) {
         console.log("Error register user", error);
