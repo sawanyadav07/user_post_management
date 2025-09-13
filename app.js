@@ -1,13 +1,11 @@
 const express= require("express");
 const app= express();
 
+const authRoute= require('./routes/authRoute')
+
 app.use(express.json());
 
-// app.use('/api',);
-
-app.get("/", (req, res)=>{
-    res.send.status(200).send({message: "wlcome to insta"})
-});
+app.use('/api',authRoute);
 
 const PORT=4000;
 app.listen(PORT, ()=>{
