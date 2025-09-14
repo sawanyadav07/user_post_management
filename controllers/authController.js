@@ -1,10 +1,22 @@
+const User= require("../models/userModel");
+const { use } = require("../routes/authRoute");
+
 const register = async (req, res, next) => {
     try {
-        const {id, userName, password }= req.body;
-        console.log("user register successfully");
+        const {name, email, password }= req.body;
 
-        
-        res.status(200).send("user register successfully");
+        const userExist= await User.findOne({ email });
+        if(userExist) return res.status(400).json({message: "User already exists"});
+
+        const userPlayload= {
+            name,
+            email,
+            password
+        };
+
+        const newUser= await User.create(userPlayload);
+        if (newUser) return res.status(200).json({message: "user register successfully"});           
+
     } catch (error) {
         console.log("Error register user", error);
 
