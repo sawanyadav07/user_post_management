@@ -37,7 +37,7 @@ const login =async (req, res, next) => {
       const isMatch= await comparePassword(password, use̥r.password)
 
       if(!isMatch) return res.status(401).json({ message: "Invalid Credenntials"});
-
+      
          res.status(200).send("user login successfully");
     } catch (error) {
            res.status(500).json({ message: "Internal server error", error: error.message });
