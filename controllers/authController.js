@@ -1,9 +1,9 @@
 const bcrypt= require("bcrypt");
-const User= require("../models/userModel");
+const User= require("../models/userModel.js");
 const comparePassword= require('../utils/comparePassword.js');
 const hashPassword= require('../utils/hash.js');
 
-const register = async (req, res, next) => {
+exports.register = async (req, res, next) => {
     try {
         const {name, email, password }= req.body;
 
@@ -26,7 +26,7 @@ const register = async (req, res, next) => {
     }
 }
 
-const login =async (req, res, next) => {
+exports.login =async (req, res, next) => {
     try {
         const {email, password }= req.body;
         if(!email || !password) return res.status(400).json({message: "Email and password are required."})
@@ -44,5 +44,3 @@ const login =async (req, res, next) => {
     }
 
 }
-
-module.exports = { register, login };

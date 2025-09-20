@@ -4,7 +4,7 @@ const authRoute=require('../routes/authRoute.js');
 const postRoute= require('../routes/postRoute.js');
 
 router.use('/user', authRoute);
-router.use('/psot', postRoute);
+router.use('/post', postRoute);
 
 module.exports=router;
 
