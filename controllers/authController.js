@@ -2,6 +2,7 @@ const bcrypt= require("bcrypt");
 const User= require("../models/userModel.js");
 const comparePassword= require('../utils/comparePassword.js');
 const hashPassword= require('../utils/hash.js');
+const { generateToken } = require('../config/jsonwebtoken.js');
 
 exports.register = async (req, res, next) => {
     try {
@@ -31,6 +32,7 @@ exports.login =async (req, res, next) => {
         const {email, password }= req.body;
         if(!email || !password) return res.status(400).json({message: "Email and password are required."})
        const use̥r= await User.findOne({ email });
+console.log(use̥r);
 
       if(!use̥r) return res.status(400).json({ message: "User Not Found"});
 
@@ -38,7 +40,9 @@ exports.login =async (req, res, next) => {
 
       if(!isMatch) return res.status(401).json({ message: "Invalid Credenntials"});
       
-         res.status(200).send("user login successfully");
+         const token = generateToken(use̥r);
+
+         res.status(200).send({ message:"user login successfully",token: token });
     } catch (error) {
            res.status(500).json({ message: "Internal server error", error: error.message });
     }

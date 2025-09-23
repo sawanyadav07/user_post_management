@@ -10,7 +10,7 @@ exports.createPost = async (req, res, next) => {
     const postPayload = {
       title,
       content,
-      user,
+      userId,
     };
 
     const existingPost = await Post.findOne({ title, userId });
