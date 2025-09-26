@@ -10,10 +10,9 @@ exports.createPost = async (req, res, next) => {
     const postPayload = {
       title,
       content,
-      userId,
     };
 
-    const existingPost = await Post.findOne({ title, userId });
+    const existingPost = await Post.findById({ userId });
     if (existingPost) return res.status(400).json({ message: "user post already exists" });
 
     const newPost = await Post.create(postPayload);
