@@ -1,27 +1,32 @@
 const Post = require('../models/postModel.js');
 
-
 // Create Post
 exports.createPost = async (req, res, next) => {
   try {
-    const { title, content, userId } = req.body;
-    if (!title || !content || !userId) return res.status(400).json({ message: "Title, content, and user are required" });
+    const { title, content } = req.body;
+    const postUserId = req.user._id; 
+
+    if (!title || !content) {
+      return res.status(400).json({ message: "Title and content are required" });
+    }
 
     const postPayload = {
       title,
       content,
+      userId: postUserId
     };
+    console.log("🚀 ~ postPayload:", postPayload)
 
-    const existingPost = await Post.findById({ userId });
-    if (existingPost) return res.status(400).json({ message: "user post already exists" });
+    // ✅ using .create()
+    const post = await Post.create(postPayload);
+    console.log("🚀 ~ post:", post)
 
-    const newPost = await Post.create(postPayload);
-
-    res.status(200).json({ message: "create post successfully!", post: newPost })
+    return res.status(201).json({ message: "Post created successfully!", post });
   } catch (error) {
-    res.status(500).json({ message: "error", error: error.message });
+    res.status(500).json({ message: "Error creating post", error: error.message });
   }
-}
+};
+
 
 // Get All Posts
 exports.getPost = async (req, res, next) => {

@@ -10,10 +10,7 @@ exports.auth = async (req, res, next) => {
         if (!token) return res.status(401).json({ message: 'No token provided' });
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        console.log("decoded>>>", decoded);
-
         const user = await User.findById(decoded.id);
-        console.log("user>>", user);
 
         if (!user || user.isDeleted) return res.status(401).json({ message: "Invalid user" });
         req.user = user;
