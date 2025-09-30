@@ -15,11 +15,8 @@ exports.createPost = async (req, res, next) => {
       content,
       userId: postUserId
     };
-    console.log("🚀 ~ postPayload:", postPayload)
 
-    // ✅ using .create()
     const post = await Post.create(postPayload);
-    console.log("🚀 ~ post:", post)
 
     return res.status(201).json({ message: "Post created successfully!", post });
   } catch (error) {
@@ -28,15 +25,24 @@ exports.createPost = async (req, res, next) => {
 };
 
 
-// Get All Posts
+// // Get All Posts
 exports.getPost = async (req, res, next) => {
   try {
-    const posts = await Post.find()
-    res.status(200).json({ message: "get post successfully!" })
+    const us̥̥̥̥̥erId = req.params.id; // userId
+    console.log("us̥̥̥̥̥erId==>",us̥̥̥̥̥erId);
+    
+    const post̥s = await Post.find({ userId }).populate("userId", "name email");
+
+    if (!posts || posts.length === 0) {
+      return res.status(404).json({ message: "No posts found for this user" });
+    }
+
+    res.status(200).json({ message: "User posts fetched successfully!", posts });
   } catch (error) {
-    res.status(500).json({ message: "error", error: error.message });
+    res.status(500).json({ message: "Error fetching user posts", error: error.message });
   }
 }
+
 
 // Update Post
 exports.updatePost = async (req, res, next) => {
@@ -45,7 +51,6 @@ exports.updatePost = async (req, res, next) => {
     const { title, content } = req.body;
     if (title) updatePayload.title = title;
     if (content) updatePayload.content = content;
-
 
     if (Object.keys(updatePayload).length === 0) {
       return res.status(400).json({ message: "No fields to update" });
