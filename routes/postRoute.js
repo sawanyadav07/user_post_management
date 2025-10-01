@@ -5,7 +5,7 @@ const {auth}= require('../middlewares/verifyToken.js');
 const {createPost, getPost, updatePost, deletePost }= require('../controllers/postController.js');
 
 router.post('/create',auth, createPost);
-router.get('/get', getPost);
+router.get('/getById/:id', getPost);
 router.put('/update/:id',auth, updatePost);
 router.delete('/delete/:id',auth, deletePost);
 

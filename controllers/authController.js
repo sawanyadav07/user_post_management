@@ -6,15 +6,15 @@ const { generateToken } = require('../config/jsonwebtoken.js');
 
 exports.register = async (req, res, next) => {
     try {
-        const {name, email, password }= req.body;
+        const {name, userName, password }= req.body;
 
-        const userExist= await User.findOne({ email });
+        const userExist= await User.findOne({ userName });
         if(userExist) return res.status(400).json({message: "User already exists"});
 
         const hashedPassword=await hashPassword(password);
         const userPlayload= {
-            name,
-            email,
+            name: name,
+            userName,
             password: hashedPassword
         };
 
@@ -29,17 +29,17 @@ exports.register = async (req, res, next) => {
 
 exports.login =async (req, res, next) => {
     try {
-        const {email, password }= req.body;
-        if(!email || !password) return res.status(400).json({message: "Email and password are required."})
-       const use̥r= await User.findOne({ email });
+        const {userName, password }= req.body;
+        if(!userName || !password) return res.status(400).json({message: "Username and password are required."})
+       const user= await User.findOne({ userName });
 
-      if(!use̥r) return res.status(400).json({ message: "User Not Found"});
+      if(!user) return res.status(400).json({ message: "User Not Found"});
 
-      const isMatch= await comparePassword(password, use̥r.password)
+      const isMatch= await comparePassword(password, user.password); 
 
       if(!isMatch) return res.status(401).json({ message: "Invalid Credenntials"});
       
-         const token = generateToken(use̥r);
+         const token = generateToken(user);
 
          res.status(200).send({ message:"user login successfully",token: token });
     } catch (error) {
