@@ -67,7 +67,7 @@ exports.updatePost = async (req, res, next) => {
     if (!updatedPost) return res.status(400).json({ message: "Post not found" });
     return res.status(200).json({ message: "Post updated successfully!", post: updatedPost });
   } catch (error) {
-    res.status(500).json({ message: "Error", error: error.message });
+   return res.status(500).json({ message: "Error", error: error.message });
   }
 }
 
@@ -80,10 +80,10 @@ exports.deletePost = async (req, res, next) => {
 
     if (!deletedPost)  return res.status(404).json({ message: "Post not found" });
     
-    res.status(200).json({ message: "Post deleted successfully!" });
+    return res.status(200).json({ message: "Post deleted successfully!" });
   } catch (error) {
     console.error("Error deleting post:", error);
-    res.status(500).json({ message: "Error", error: error.message });
+    return res.status(500).json({ message: "Error", error: error.message });
   }
 };
 
