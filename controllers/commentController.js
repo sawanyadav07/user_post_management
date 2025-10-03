@@ -28,3 +28,17 @@ exports.createComment = async (req, res, next) => {
     return res.status(500).json({ message: "Error creating comment", error: error.message });
   }
 };
+
+// ✅ Get All Comments for a Post
+exports.getCommentsByPost = async (req, res, next) => {
+  try {
+    const { postId } = req.query;
+
+    if (!postId) return res.status(400).json({ message: "Post ID is required" });
+
+    const comments = await Comment.find({ postId }).populate("userId", "username");
+    return res.status(200).json({ message: "Comments fetched successfully!", comments });
+  } catch (error) {
+    return res.status(500).json({ message: "Error fetching comments", error: error.message });
+  }
+};
