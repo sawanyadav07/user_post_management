@@ -47,6 +47,7 @@ const app = express();
 
 // ===== Middleware =====
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // for form submission
 app.use(express.static(path.join(__dirname, "public")));
 
 // ===== View Engine Setup =====
@@ -58,12 +59,53 @@ app.set("layout", "layouts/main");
 // ===== Database =====
 connectDB();
 
-// ===== Routes =====
+// ===== API Routes =====
+app.use("/api", allRoute);
+
+// ===== EJS Routes =====
 app.get("/", (req, res) => {
   res.render("home", { title: "Instagram Project" });
 });
 
-app.use("/api", allRoute);
+app.get("/register", (req, res) => {
+  res.render("register", { title: "Register", message: null });
+});
+
+app.get("/login", (req, res) => {
+  res.render("login", { title: "Login", message: null });
+});
+
+// ===== POST: Register (Form Submission) =====
+app.post("/register", async (req, res) => {
+  try {
+    const response = await fetch(`http://localhost:${process.env.PORT || 5600}/api/user/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req.body),
+    });
+
+    const data = await response.json();
+    res.render("register", { title: "Register", message: data.message });
+  } catch (error) {
+    res.render("register", { title: "Register", message: "Error registering user" });
+  }
+});
+
+// ===== POST: Login (Form Submission) =====
+app.post("/login", async (req, res) => {
+  try {
+    const response = await fetch(`http://localhost:${process.env.PORT || 5600}/api/user/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req.body),
+    });
+
+    const data = await response.json();
+    res.render("login", { title: "Login", message: data.message });
+  } catch (error) {
+    res.render("login", { title: "Login", message: "Error logging in" });
+  }
+});
 
 // ===== Start Server =====
 const PORT = process.env.PORT || 5600;

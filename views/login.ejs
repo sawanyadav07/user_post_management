@@ -1,11 +1,16 @@
 <h1>Login</h1>
-<form action="/login" method="POST" class="form-box">
-  <label>Email:</label>
-  <input type="email" name="email" required />
+<form action="/api/user/login" method="POST" class="form-box">
+  <label>Username:</label>
+  <input type="text" name="userName" required />
 
   <label>Password:</label>
   <input type="password" name="password" required />
 
   <button type="submit">Login</button>
-  <p>Don’t have an account? <a href="/register">Register here</a></p>
 </form>
+
+<% if (message) { %>
+  <p style="color: green;"><%= message %></p>
+<% } %>
+
+<p>Don't have an account? <a href="/register">Register here</a></p>
