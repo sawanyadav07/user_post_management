@@ -35,11 +35,14 @@
 // })
 
 
+
 const express = require("express");
 const dotenv = require("dotenv");
 const path = require("path");
 const expressLayouts = require("express-ejs-layouts");
+const cookieParser = require('cookie-parser');
 const allRoute = require("./routes/allRoute.js");
+const uiRoutes = require("./routes/uiRoutes.js");
 const { connectDB } = require("./config/db.js");
 
 dotenv.config();
@@ -47,65 +50,22 @@ const app = express();
 
 // ===== Middleware =====
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // for form submission
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-// ===== View Engine Setup =====
+// ===== EJS Setup =====
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(expressLayouts);
 app.set("layout", "layouts/main");
 
-// ===== Database =====
+// ===== Connect Database =====
 connectDB();
 
-// ===== API Routes =====
-app.use("/api", allRoute);
-
-// ===== EJS Routes =====
-app.get("/", (req, res) => {
-  res.render("home", { title: "Instagram Project" });
-});
-
-app.get("/register", (req, res) => {
-  res.render("register", { title: "Register", message: null });
-});
-
-app.get("/login", (req, res) => {
-  res.render("login", { title: "Login", message: null });
-});
-
-// ===== POST: Register (Form Submission) =====
-app.post("/register", async (req, res) => {
-  try {
-    const response = await fetch(`http://localhost:${process.env.PORT || 5600}/api/user/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(req.body),
-    });
-
-    const data = await response.json();
-    res.render("register", { title: "Register", message: data.message });
-  } catch (error) {
-    res.render("register", { title: "Register", message: "Error registering user" });
-  }
-});
-
-// ===== POST: Login (Form Submission) =====
-app.post("/login", async (req, res) => {
-  try {
-    const response = await fetch(`http://localhost:${process.env.PORT || 5600}/api/user/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(req.body),
-    });
-
-    const data = await response.json();
-    res.render("login", { title: "Login", message: data.message });
-  } catch (error) {
-    res.render("login", { title: "Login", message: "Error logging in" });
-  }
-});
+// ===== Routes =====
+app.use("/", uiRoutes);        // for UI routes (EJS pages)
+app.use("/api", allRoute);     // for API routes (backend)
 
 // ===== Start Server =====
 const PORT = process.env.PORT || 5600;
