@@ -5,7 +5,7 @@ exports.likePost = async (req, res) => {
   try {
     console.log("here...........");
     
-    const { postId } = req.query;
+    const  postId  = req.query.id;
     const userId = req.user._id;
 
     if (!postId) {
@@ -28,7 +28,7 @@ exports.likePost = async (req, res) => {
 // ✅ Unlike a Post
 exports.unlikePost = async (req, res) => {
   try {
-    const { postId } = req.query;
+    const postId = req.query.id;
     const userId = req.user._id;
 
     if (!postId) {
@@ -50,7 +50,7 @@ exports.unlikePost = async (req, res) => {
 // ✅ Get all likes for a Post
 exports.getLikesByPost = async (req, res) => {
   try {
-    const { postId } = req.query;
+    const  postId  = req.query.id;
 
     if (!postId) {
       return res.status(400).json({ message: "postId is required" });

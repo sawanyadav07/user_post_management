@@ -3,8 +3,10 @@ const Comment = require("../models/commentModel");
 exports.createComment = async (req, res, next) => {
   try {
     const { text } = req.body;
-    const {  postId } = req.query; 
+    const postId  = req.query.id; 
       const userId = req.user._id;
+      console.log(postId, userId);
+      
 
     const commentPayload={ 
         userId,
