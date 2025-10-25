@@ -43,6 +43,7 @@ const expressLayouts = require("express-ejs-layouts");
 const cookieParser = require('cookie-parser');
 const allRoute = require("./routes/allRoute.js");
 const uiRoutes = require("./routes/uiRoutes.js");
+const errorHandler = require("./middlewares/errorHandler.js")
 const { connectDB } = require("./config/db.js");
 
 dotenv.config();
@@ -53,6 +54,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(errorHandler);
 
 // ===== EJS Setup =====
 app.set("view engine", "ejs");

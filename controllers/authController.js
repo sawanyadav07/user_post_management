@@ -3,13 +3,14 @@ const User= require("../models/userModel.js");
 const comparePassword= require('../utils/comparePassword.js');
 const hashPassword= require('../utils/hash.js');
 const { generateToken } = require('../config/jsonwebtoken.js');
+const customError = require("../utils/customError.js");
 
 exports.register = async (req, res, next) => {
     try {
         const {name, userName, password }= req.body;
 
         const userExist= await User.findOne({ userName });
-        if(userExist) return res.status(400).json({message: "User already exists"});
+          if(userExist) return next(new customError("User already exists", 401))
 
         const hashedPassword=await hashPassword(password);
         const userPlayload= {
@@ -19,11 +20,12 @@ exports.register = async (req, res, next) => {
         };
 
         const newUser= await User.create(userPlayload);
-        if (newUser) return res.status(200).json({message: "user register successfully"});           
-       else res.status(400).json({message: "Failed to register user"});
+        if (newUser) return  next(new customError("user register successfully", 200))           
+       else return next(new customError("Failed to register users", 401))
     } catch (error) {
-       console.error("Error registering user:", error);
         res.status(500).json({ message: "Internal server error" });
+        return next(new customError("Internal server error", 401))
+        
     }
 }
 
