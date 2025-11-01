@@ -3,7 +3,6 @@ const User= require("../models/userModel.js");
 const comparePassword= require('../utils/comparePassword.js');
 const hashPassword= require('../utils/hash.js');
 const { generateToken } = require('../config/jsonwebtoken.js');
-const customError = require("../utils/customError.js");
 
 exports.register = async (req, res, next) => {
     try {
