@@ -5,6 +5,7 @@ const hashPassword = require('../utils/hash.js');
 const { generateToken } = require('../config/jsonwebtoken.js');
 const { registerValidation, loginValidation } = require("../validators/userValidation.js");
 
+
 exports.register = async (req, res, next) => {
   try {
     // ✅ Validate input using Joi
