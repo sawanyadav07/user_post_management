@@ -5,35 +5,6 @@ const hashPassword = require('../utils/hash.js');
 const { generateToken } = require('../config/jsonwebtoken.js');
 const { registerValidation, loginValidation } = require("../validators/userValidation.js");
 
-
-exports.register = async (req, res, next) => {
-  try {
-    // ✅ Validate input using Joi
-    const { error } = registerValidation.validate(req.body);
-    if (error) {
-      return res.status(400).json({ message: error.details[0].message });
-    }
-    const { name, userName, password } = req.body;
-
-    const userExist = await User.findOne({ userName });
-    if (userExist) return
-
-    const hashedPassword = await hashPassword(password);
-    const userPlayload = {
-      name: name,
-      userName,
-      password: hashedPassword
-    };
-
-    const newUser = await User.create(userPlayload);
-    if (newUser) return
-    else return
-  } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
-    return
-  }
-}
-
 exports.register = async (req, res, next) => {
   try {
     // ✅ Validate input using Joi
