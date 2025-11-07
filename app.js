@@ -39,7 +39,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const path = require("path");
-const expressLayouts = require("express-ejs-layouts");
 const cookieParser = require('cookie-parser');
 const allRoute = require("./routes/allRoute.js");
 const uiRoutes = require("./routes/uiRoutes.js");
@@ -56,17 +55,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(errorHandler);
 
-// ===== EJS Setup =====
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
-app.use(expressLayouts);
-app.set("layout", "layouts/main");
-
 // ===== Connect Database =====
 connectDB();
 
 // ===== Routes =====
-app.use("/", uiRoutes);        // for UI routes (EJS pages)
 app.use("/api", allRoute);     // for API routes (backend)
 
 // ===== Start Server =====

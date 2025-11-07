@@ -9,7 +9,7 @@ const { registerValidation, loginValidation } = require("../validators/userValid
 exports.register = async (req, res, next) => {
   try {
     // ✅ Validate input using Joi
-    const { error } = loginValidation.validate(req.body);
+    const { error } = registerValidation.validate(req.body);
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
     }
@@ -49,6 +49,11 @@ exports.register = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
   try {
+      // ✅ Validate input using Joi
+    const { error } = loginValidation.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
     const { userName, password } = req.body;
     if (!userName || !password) return res.status(400).json({ message: "Username and password are required." })
     const user = await User.findOne({ userName });
