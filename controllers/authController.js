@@ -32,7 +32,7 @@ exports.register = async (req, res, next) => {
 
     const newUser = await User.create(userPayload);
 
-    return res.status(201).json({
+    return res.status(200).json({
       success: true,
       message: "User registered successfully",
       user: {
