@@ -3,7 +3,6 @@ const Like = require("../models/likeModel");
 // ✅ Like a Post
 exports.likePost = async (req, res) => {
   try {
-    console.log("here...........");
     
     const  postId  = req.query.id;
     const userId = req.user._id;
