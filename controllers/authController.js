@@ -10,6 +10,8 @@ exports.register = async (req, res, next) => {
   try {
     // ✅ Validate input using Joi
     const { error } = registerValidation.validate(req.body);
+    console.log("here......");
+    
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
     }
