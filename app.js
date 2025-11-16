@@ -41,7 +41,6 @@ const dotenv = require("dotenv");
 const path = require("path");
 const cookieParser = require('cookie-parser');
 const allRoute = require("./routes/allRoute.js");
-const uiRoutes = require("./routes/uiRoutes.js");
 const errorHandler = require("./middlewares/errorHandler.js")
 const { connectDB } = require("./config/db.js");
 
