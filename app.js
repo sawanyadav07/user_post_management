@@ -20,7 +20,7 @@ app.use(errorHandler);
 connectDB();
 
 // ===== Routes =====
-app.use("/api", allRoute);     // for API routes (backend)
+app.use("/api", allRoute);     
 
 // ===== Start Server =====
 const PORT = process.env.PORT || 5600;
