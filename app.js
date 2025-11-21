@@ -18,7 +18,6 @@ app.use(errorHandler);
 
 connectDB();
 
-// ===== Routes =====
 app.use("/api", allRoute);     
 
 // ===== Start Server =====
