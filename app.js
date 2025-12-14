@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const allRoute = require("./routes/allRoute.js");
 const errorHandler = require("./middlewares/errorHandler.js")
 const { connectDB } = require("./config/db.js");
+const morgan = require('morgan');
 
 dotenv.config();
 const app = express();
@@ -14,7 +15,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(errorHandler);
+app.use(errorHandler); 
+app.use(morgan('dev'));
 
 connectDB();
 

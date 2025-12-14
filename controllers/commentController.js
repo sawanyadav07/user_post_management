@@ -2,12 +2,12 @@ const Comment = require("../models/commentModel");
 
 exports.createComment = async (req, res, next) => {
   try {
+    console.log("==>",req);
+    
     const { text } = req.body;
     const postId  = req.query.id; 
-      const userId = req.user._id;
-      console.log(postId, userId);
+      const userId = req.user._id;      
       
-
     const commentPayload={ 
         userId,
         postId,
