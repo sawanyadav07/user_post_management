@@ -3,12 +3,16 @@ const asyncHandler = require('../utils/asyncHandler');
 
 // 🔔 Create Notification (internal use)
 exports.createNotification = asyncHandler(async ({ userId, message }) => {
+  console.log("here...............", userId, message);
+  
   if (!userId || !message) return;
 
   await Notification.create({
     user: userId,
     message
   });
+  console.log("created successfully");
+  
 });
 
 // 📥 Get My Notifications

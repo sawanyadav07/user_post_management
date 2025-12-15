@@ -6,15 +6,19 @@ const { createNotification } = require('./notificationController');
 exports.likePost = async (req, res) => {
   try {
 
+
     const postId = req.query.id;
+    
     const userId = req.user._id;
 
+    
     if (!postId) {
       return res.status(400).json({ message: "postId is required" });
     }
 
     // ✅ 1. Find post (IMPORTANT)
     const post = await Post.findById(postId);
+   
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }
@@ -25,16 +29,18 @@ exports.likePost = async (req, res) => {
     }
 
     const newLike = await Like.create({ userId, postId });
+    console.log(newLike);
 
-    // 🔔 CREATE NOTIFICATION
-    if (post.user.toString() !== req.user._id.toString()) {
-      console.log("=======.>",req.user.username);
-      
+
+    // 🔔 CREATE NOTIFICATION (only if liker is not post owner)
+    if (post && req?.user?._id && !post.userId.equals(req.user._id)) {
+
       await createNotification({
-        userId: post.user, // post owner
-        message: `${req.user.username} liked your post`
+        userId: post.userId, // post owner
+        message: `${req.user.name} liked your post`,
       });
     }
+
     return res.status(201).json({ message: "Post liked successfully!", like: newLike });
   } catch (error) {
     return res.status(500).json({ message: "Error liking post", error: error.message });
@@ -47,7 +53,7 @@ exports.unlikePost = async (req, res) => {
     const postId = req.query.id;
     const userId = req.user._id;
     console.log(userId);
-    
+
 
     if (!postId) {
       return res.status(400).json({ message: "postId is required" });
