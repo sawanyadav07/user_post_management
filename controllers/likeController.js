@@ -5,12 +5,8 @@ const { createNotification } = require('./notificationController');
 // ✅ Like a Post
 exports.likePost = async (req, res) => {
   try {
-
-
     const postId = req.query.id;
-    
     const userId = req.user._id;
-
     
     if (!postId) {
       return res.status(400).json({ message: "postId is required" });

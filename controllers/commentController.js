@@ -2,7 +2,6 @@ const Comment = require("../models/commentModel");
 
 exports.createComment = async (req, res, next) => {
   try {
-    console.log("==>",req);
     
     const { text } = req.body;
     const postId  = req.query.id; 
@@ -35,7 +34,6 @@ exports.createComment = async (req, res, next) => {
 exports.getCommentById = async (req, res, next) => {
   try {
     const { commentId } = req.query;
-console.log("commentId>>>>",commentId);
 
     if (!commentId) {
       return res.status(400).json({ message: "commentId is required" });
