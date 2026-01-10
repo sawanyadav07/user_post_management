@@ -1,19 +1,28 @@
 const Comment = require("../models/commentModel");
+const Post = require("../models/postModel");
+const { createNotification } = require('./notificationController');
 
 exports.createComment = async (req, res, next) => {
   try {
-    
+
     const { text } = req.body;
-    const postId  = req.query.id; 
-      const userId = req.user._id;      
-      
-    const commentPayload={ 
-        userId,
-        postId,
-        text: text 
+    const postId = req.query.id;
+    const userId = req.user._id;
+
+    const commentPayload = {
+      userId,
+      postId,
+      text: text
     }
-    if (!text) 
+    if (!text)
       return res.status(400).json({ message: "Comment text is required" });
+
+    // ✅ 1. Find post (IMPORTANT)
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
 
     const findComment = await Comment.findOne(commentPayload);
 
@@ -22,6 +31,15 @@ exports.createComment = async (req, res, next) => {
     }
 
     const newComment = await Comment.create(commentPayload);
+
+    // 🔔 CREATE NOTIFICATION (only if liker is not post owner)
+    if (post && req?.user?._id && !post.userId.equals(req.user._id)) {
+
+      await createNotification({
+        userId: post.userId, // post owner
+        message: `${req.user.name} comment your post`,
+      });
+    }
 
     return res.status(201).json({ message: "Comment created successfully!", comment: newComment });
 
@@ -75,7 +93,7 @@ exports.updateComment = async (req, res, next) => {
     const { text } = req.body;
     const userId = req.user._id;
 
-    if (!text) 
+    if (!text)
       return res.status(400).json({ message: "Comment text is required" });
 
     const comment = await Comment.findById(commentId);
